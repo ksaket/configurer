@@ -1,4 +1,4 @@
-
+// Basic Datastructure for storing configurations alongwith auditing info.
 message Property {
   required String key = 1;
   optional String description = 2;
