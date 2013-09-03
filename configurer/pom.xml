@@ -93,6 +93,30 @@
                 <artifactId>appengine-maven-plugin</artifactId>
                 <version>${appengine.target.version}</version>
             </plugin>
+            <plugin>
+    			<groupId>de.softwareforge.mojo</groupId>
+    		    <artifactId>maven-protoc-plugin</artifactId>
+    			<version>0.2-HPS-2</version>
+    			<configuration>
+    	    	<protocExecutable>protoc</protocExecutable>
+        		<protoSourceRoot>${project.basedir}/src/main/resources</protoSourceRoot>
+        		<languageSpecifications>
+            		<LanguageSpecification>
+               			<language>JAVA</language>
+               			<outputDirectory>
+                    		${project.basedir}/target/generated-sources/java
+               			</outputDirectory>
+            		</LanguageSpecification>
+        		</languageSpecifications>                     
+    			</configuration>
+    			<executions>
+        			<execution>
+           		 		<goals>
+                			<goal>compile</goal>
+            			</goals>
+        			</execution>
+    			</executions>
+			</plugin>
         </plugins>
     </build>
 
