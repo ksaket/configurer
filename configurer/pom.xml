@@ -99,12 +99,12 @@
     			<version>0.2-HPS-2</version>
     			<configuration>
     	    	<protocExecutable>protoc</protocExecutable>
-        		<protoSourceRoot>${project.basedir}/src/main/resources</protoSourceRoot>
+        		<protoSourceRoot>${project.basedir}/src/main/resources/protos</protoSourceRoot>
         		<languageSpecifications>
             		<LanguageSpecification>
                			<language>JAVA</language>
                			<outputDirectory>
-                    		${project.basedir}/target/generated-sources/java
+                    		${project.basedir}/target/configurer-1.0-SNAPSHOT/WEB-INF/lib/configurer-protos.jar
                			</outputDirectory>
             		</LanguageSpecification>
         		</languageSpecifications>                     
