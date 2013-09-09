@@ -3,8 +3,9 @@ Configurer
 
 Provides a way to simplify configuration management on Google App Engine applications (Java).
 
-=========== Some basic notes =====================
-A distributed configuration management for GAE application. Idea is to place configurations in cloud storage and poll for changes. Configurations are parsed and stored in Datastore and primarily served from Memcache. 
+=========== Some basic notes ===================== :
+
+A distributed configuration management for GAE application. Idea is to place configurations in cloud storage and poll for changes. Configurations are parsed and 	stored in Datastore and primarily served from Memcache. 
 
 (Future Roadmap) - Configurations are also stored in local cache per instance using a LRU queue to avoid API call latencies. A flag is placed in an instance which is dirtied with configuration changes.
 
