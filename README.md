@@ -1,18 +1,55 @@
-configurer
+Configurer
 ==========
 
 Provides a way to simplify configuration management on Google App Engine applications (Java).
 
 =========== Some basic notes =====================
-A distributed configuration management for GAE application. Idea is to place configurations in cloud storage and poll for changes. Configurations are parsed and stored in Datastore and primarily served from Memcache. Configurations are further stored in in-mem cache per instance to avoid API call latencies. A flag is placed in an instance which is dirtied withconfiguration changes.
+A distributed configuration management for GAE application. Idea is to place configurations in cloud storage and poll for changes. Configurations are parsed and stored in Datastore and primarily served from Memcache. 
 
-Configuration changes are polled via cron tasks and an additional task that gets kicked off with deployment changes.
+(Future Roadmap) - Configurations are also stored in local cache per instance using a LRU queue to avoid API call latencies. A flag is placed in an instance which is dirtied with configuration changes.
 
-There should a suppport for namespaces. Configuration changes per version should also be possible.
+Application exposes a handler that allows Admin users to upload a JSON file to cloud storage which is subsequently parsed and stored in Datastore and Memcache. (Also look into cloud storage object change notification). Additionally, Admin can also specify an existing Cloud Storage file location to kickoff the task post deployment.
+
+Configurations can be set at different levels:
+
+ 			App ---|
+				   |
+			      Module ---|
+							|
+						 Version ---|
+									|
+								Namespace
 
 
-		Version (Default by default)   =========>  Namespace ========> Configs
 
-In long term there should be a serving URL that should allow application admins to change configuration via UI and push them on separate versions.
+As configuration files can be large in size, an streaming API should be used to read and parse configurations. N (Configurable) number of backups should be maintained and it should be easy to revert configurations if necessary. AuditLog of every config change should also be maintained.
 
-As configuration files can be large in size, an streaming API should be used to read and parse configurations. N number of backups should be maintained and it should be easy to revert configurations if necessary.
+
+Config location - gs://{app-id}/configurations/app-config.json
+
+Design:
+
+										--------------
+					---------------->  | Cloud Storage | ---------------	
+					|					--------------                 |
+					|                                                  | Parse/Verify/LogAudit config file
+					|                                                  |
+					|												   V	
+	  ---------------------------------   RPC through URLFetch    -------------    Store          ---------------
+     | GAE Frontend App Config Handler |  -------------------->  | GAE Backend |  -------------> | GAE Datastore |
+      ---------------------------------                           -------------                   ---------------
+																		|								|
+																		| Store							|
+																		V								|
+																  --------------                        |
+																 | GAE Memcache |                       |
+																  --------------                        |
+																	    |                               |
+																		|                               |
+																		V                               |
+																  -------------      Failover to        |
+																 | Application | <----------------------|
+																  -------------
+																
+
+TODO - Add libraries and data structures to be used.

@@ -7,10 +7,20 @@ option java_outer_classname = "Configurer";
 option java_package = "com.google.appengine.config";
 option java_generate_equals_and_hash = true;
 
+message AppEngineModule {
+   required string module = 1;
+   optional string version = 2;
+}
+
 // A tuple that stores user defined properties.
 message Property {
   required string key = 1;
   optional string description = 2;
+  // Namespace under which this configuration lives. 
+  required string namespace = 3 [default = ''];
+
+  // Module which owns this configuration.
+  optional AppEngineModule module = 4;
   enum Type {
   	TEXT = 1;
   	NUMBER = 2;
@@ -18,19 +28,14 @@ message Property {
   	DATE = 4;
   	URL = 5;
   }
-  required Type type = 3 [default =  TEXT];
-  repeated string values = 4;
+  required Type type = 5 [default =  TEXT];
+  repeated string values = 6;
 
   // Whether this property can be modified by the application.
-  required bool immutable = 5 [default = false];
+  required bool immutable = 7 [default = false];
 
   // TTL for this configuration. This is an approximate value.
-  optional int64 expires_after = 6;
-}
-
-message AppEngineModule {
-   required string module = 1;
-   optional string version = 2;
+  optional int64 expires_after = 8;
 }
 
 message AuditLog {
@@ -55,17 +60,11 @@ message Configuration {
   // Identifier for this configuration.
   required string id = 1;
 
-  // Namespace under which this configuration lives. 
-  required string namespace = 2 [default = ''];
-
-  // Module which owns this configuration.
-  optional AppEngineModule module = 3;
-
   // Should this configuration be stored in Memcache as well.
-  required bool store_in_memcache = 4; 
-  repeated Property properties = 5;
-  required int32 max_size = 6 [default = 33554432]; // 32 MB.
-  optional int32 max_backup = 7 [default = 1];
+  required bool store_in_memcache = 2; 
+  repeated Property properties = 3;
+  required int32 max_size = 4 [default = 33554432]; // 32 MB.
+  optional int32 max_backup = 5 [default = 1];
 }
 
 message GetPropertyRequest {
